@@ -86,6 +86,12 @@ class Canvas(QLabel):
         # en : The variable change allows to change the state of the painter (draw/erase mode). However,
         # this function is not yet well implemented.
         self.change = False
+        # fr : all_points est un tableau qui va contenir tous les points du tracé.
+        # en : all_points is an array that will contain all the points of drawing.
+        self.all_points = np.empty(0)
+        # fr : last_points est un tableau qui va contenir tous les points du  dernier tracé validé.
+        # en : all_points is an array that will contain all the points of last valid drawing.
+        self.last_points = np.empty(0)
 
     # fr : méthode servant à modifier la variable color avec la couleur passée en argument.
     # en : method used to modify the color variable with the color passed as an argument.
@@ -251,6 +257,36 @@ class Canvas(QLabel):
             fichier.write(",{0:.8f}\n".format(angle_array[i]))
         fichier.close()
 
+        # fr : Lorsqu'on valide une trajectoire, last_points prend alors la valeur de all_points.
+        # en : When validating a trajectory, last_points then takes the value of all_points.
+        self.last_points = self.all_points
+
+    # fr : Cette méthode permet de retracer la dernière trajectoire validée.
+    # en : This method allows to retrace the last validated trajectory.
+    def loadLastTrajectory(self):
+        # fr : On active le painter pour retracer la dernière trajectoire validée.
+        # en : We active the painter to redraw the last valid trajectory.
+        painter = QPainter(self.pixmap())
+        pen = QPen()
+        pen.setWidth(3)
+        pen.setColor(self.color)
+        pen.setStyle(Qt.SolidLine)
+        painter.setPen(pen)
+
+        painter.begin(self)
+
+        # fr : On retrace la trajectoire à l'aide de ses points.
+        # en : We redraw the last trajectory with his points.
+        for i in range(0, len(self.last_points) - 1):
+            painter.drawLine(self.last_points[i], self.last_points[i + 1])
+            self.update()
+
+        painter.end()
+
+        # fr : On vide le tableau all_points pour les prochains tracés.
+        # en : We empty the all_points array for the next plots.
+        self.all_points = np.empty(0)
+
     # fr : Cette méthode permet de calculer le coefficient directeur d'une droite défnie par deux points.
     # en : This method makes it possible to calculate the directing coefficient of a straight line defined by two
     # points.
@@ -312,6 +348,9 @@ class Canvas(QLabel):
             if not painter.isActive():
                 painter.begin(self)
 
+            # fr : On enregistre tous les points du tracé
+            # en : We save all the drawing points.
+            self.all_points = np.append(self.all_points, event.pos())
             # fr : On trace la droite entre le nouveau point acquis et le précédent.
             # en : The line is drawn between the new acquired point and the previous one.
             painter.drawLine(self.previousPoint, event.pos())
@@ -433,6 +472,14 @@ class MainWindow(QMainWindow):
         # en : The validate_circuit method is called each time the button in question is clicked.
         validButton.clicked.connect(self.canvas.validate_circuit)
         layout.addWidget(validButton)
+
+        # fr : Ajout et affichage du bouton "LOAD LAST TRAJECTORY" dans la fenêtre principale.
+        # en : Addition and display of the "LOAD LAST TRAJECTORY" button in the main window.
+        loadingButton = QButton("#000000", "LOAD LAST TRAJECTORY")
+        # fr : La méthode loadLastTrajectory est appelée à chaque clic sur le bouton en question.
+        # en : The loadLastTrajectory method is called each time the button in question is clicked.
+        loadingButton.clicked.connect(self.canvas.loadLastTrajectory)
+        layout.addWidget(loadingButton)
 
         # TODO fr : le bouton suivant est encore en cours d'écriture et ne fonctionne pas de la bonne manière à ce jour.
         # TODO en : the following button is still being written and not working the right way so far.
