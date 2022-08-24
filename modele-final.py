@@ -310,6 +310,7 @@ class Canvas(QLabel):
     # en : The mouseReleaseEvent : When the mouse click is released, the drawing is paused.
     def mouseReleaseEvent(self, event):
         self.isDrawing = 0
+        self.setCursor(QCursor(Qt.ArrowCursor))
 
     # fr : L'événement mouseMoveEvent : Lorsque le dessin est actif et que l'on bouge la souris, on effectue le tracé de
     # la trajectoire et on récolte des données..
@@ -329,6 +330,7 @@ class Canvas(QLabel):
         # fr : Si le dessin est actif
         # en : if drawing is active
         if self.isDrawing == 1:
+            self.setCursor(QCursor(Qt.CrossCursor))
             # fr : Si c'est le début du dessin (premier point à tracer).
             # en : if it is the beginning of the drawing (first point to draw);
             if self.previousPoint is None:
@@ -427,7 +429,8 @@ class QButton(QPushButton):
         self.setFixedSize(QSize(200, 30))
         self.setText(text)
         self.color = color
-        self.setStyleSheet("QPushButton::hover{background-color: green; border-style: outset; border-radius: 10px ;}")
+        self.setStyleSheet("QPushButton::hover{background-color: orange; border-style: outset; border-radius: 10px ;}"
+                           "QPushButton{background-color: white; border-style: outset; border-radius: 10px ;}")
         self.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
 
 
@@ -439,6 +442,7 @@ class MainWindow(QMainWindow):
         # fr : Titre de la fenêtre à adapter selon votre choix.
         # en : Title of the window to be adapted according to your choice.
         self.setWindowTitle("Circuit d'apprentissage pour véhicule autonome")
+        self.setStyleSheet("background-color: purple;")
 
         # fr : Création du Canvas
         # en : Canvas' creation
