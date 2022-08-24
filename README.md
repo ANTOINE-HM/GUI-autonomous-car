@@ -73,6 +73,7 @@ roslaunch mushr_ros_intro path_publisher.launch plan_file:='$(find mushr_ros_int
  - Tracer une trajectoire (il est possible de s'arrêter pendant le tracé et de le reprendre ensuite)
  - Valider votre trajectoire à l'aide du bouton si elle vous convient
  - Si le tracé ne vous convient pas, effacer à l'aide du bouton "CLEAR CIRCUIT"
+ - Si vous voulez redessiner le dernier tracé validé, cliquez sur "LOAD LAST TRAJECTORY"
  - Une fois le fichier de commande généré (appelé par défaut trajectoire.txt), copier-coller le contenu du fichier dans votre fichier de commande pour RVIZ.
 
 
