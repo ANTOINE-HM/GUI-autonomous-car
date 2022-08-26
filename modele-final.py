@@ -461,13 +461,17 @@ class MainWindow(QMainWindow):
         self.add_palette_buttons(palette)
         layout.addLayout(palette)
 
+        actions = QHBoxLayout()
+        actions.setAlignment(Qt.AlignCenter)
+
         # fr : Ajout et affichage du bouton "CLEAR CIRCUIT" dans la fenêtre principale.
         # en : Addition and display of the "CLEAR CIRCUIT" button in the main window.
         clearButton = QButton("#000000", "CLEAR CIRCUIT")
         # fr : La méthode clear_circuit est appelée à chaque clic sur le bouton en question.
         # en : The clear_circuit method is called each time the button in question is clicked.
         clearButton.clicked.connect(self.canvas.clear_circuit)
-        layout.addWidget(clearButton)
+
+        self.add_action_buttons(clearButton, actions)
 
         # fr : Ajout et affichage du bouton "VALID CIRCUIT" dans la fenêtre principale.
         # en : Addition and display of the "VALID CIRCUIT" button in the main window.
@@ -475,7 +479,8 @@ class MainWindow(QMainWindow):
         # fr : La méthode validate_circuit est appelée à chaque clic sur le bouton en question.
         # en : The validate_circuit method is called each time the button in question is clicked.
         validButton.clicked.connect(self.canvas.validate_circuit)
-        layout.addWidget(validButton)
+
+        self.add_action_buttons(validButton, actions)
 
         # fr : Ajout et affichage du bouton "LOAD LAST TRAJECTORY" dans la fenêtre principale.
         # en : Addition and display of the "LOAD LAST TRAJECTORY" button in the main window.
@@ -483,7 +488,8 @@ class MainWindow(QMainWindow):
         # fr : La méthode loadLastTrajectory est appelée à chaque clic sur le bouton en question.
         # en : The loadLastTrajectory method is called each time the button in question is clicked.
         loadingButton.clicked.connect(self.canvas.loadLastTrajectory)
-        layout.addWidget(loadingButton)
+
+        self.add_action_buttons(loadingButton, actions)
 
         # TODO fr : le bouton suivant est encore en cours d'écriture et ne fonctionne pas de la bonne manière à ce jour.
         # TODO en : the following button is still being written and not working the right way so far.
@@ -491,6 +497,7 @@ class MainWindow(QMainWindow):
         eraseButton.clicked.connect(self.canvas.changeEraseMode)
         layout.addWidget(eraseButton)"""
 
+        layout.addLayout(actions)
         self.setCentralWidget(widget)
 
     # fr : Méthode permettant de définir l'action des boutons de la palette de couleur.
@@ -503,6 +510,10 @@ class MainWindow(QMainWindow):
             b.pressed.connect(lambda c=c: self.canvas.set_pen_color(c))
             layout.addWidget(b)
 
+    # fr : Méthode permettant d'ajouter un bouton dans une zone prédéfinie.
+    # en : Method to add a button in predefined zone by layout given.
+    def add_action_buttons(self, button, layout):
+            layout.addWidget(button)
 
 app = QApplication.instance()
 if not app:
